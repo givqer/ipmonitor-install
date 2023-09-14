@@ -1,6 +1,7 @@
 version: '3.9'
 services:
 
+
   nginx:
     image: ipmonitor/nginx:${APP_VERSION:-latest}
     build:

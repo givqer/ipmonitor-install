@@ -12,6 +12,7 @@ export CURRENT_UID
 export CURRENT_GID
 export ARCH
 
+
 dc-init-app: dc-pull dc-add-host dc-up dc-init
 
 dc-up:

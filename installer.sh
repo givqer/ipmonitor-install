@@ -74,10 +74,10 @@ sudo mkdir -p /opt/ipmonitor
 sudo chown $(id -u):$(id -g) /opt/ipmonitor
 git clone git@github.com:givqer/ipmonitor-install.git /opt/ipmonitor
 
-cd /opt/ipmonitor
+
 cp .env.install .env
 cat ~/docker-pass.txt | docker login --username alex.bazaly@drumncode.com --password-stdin
-
+cd /opt/ipmonitor
 sudo make dc-init-app
 
 
