@@ -9,15 +9,12 @@
 
 APP_PATH=/opt/ipmonitor
 set -e
-
 	check_folder() {
     if [[ -z $1 ]]; then
         echo "Error: The folder_path parameter is required."
         return 1
     fi
-
     local folder_path="$1"
-
     if [[ ! -d $folder_path ]]; then
         echo "Folder does not exist."
         return 1
@@ -76,85 +73,21 @@ set -e
     docker --version
     sudo usermod -aG docker $USER
 }
-
-
-
-#export  IPMONITOR_APP_TAG="${IPMONITOR_APP_TAG:-latest}"
-##export SENTRY_DSN="${SENTRY_DSN:-'https://public@sentry.example.com/1'}"
-#
-#IPMONITOR_SECRET=$(head -c 28 /dev/urandom | sha224sum -b | head -c 56)
-#export IPMONITOR_SECRET
-#
-## Talk to the user
-#echo "Welcome to the single instance IPMonitor installer"
-#echo ""
-#echo "You need at leasr 4Gb RAM to run this stack"
-#echo ""
-#echo "Power user or aspiring power user?"
-#echo "Check out our docs on deploying IPMonitor! https://linkhere/"
-#echo ""
-#
-#
-##Download specified release or use latest
-#if ! [ -z "$1" ]
-#then
-#export IPMONITOR_APP_TAG=$1
-#else
-#echo "What version of IPMonitor would you like to install? (We default to 'latest')"
-#echo "You can check out available versions here: https://hub.docker.com/r/ipmonitor/ipmonitor-app/tags"
-#read -r IPMONITOR_APP_TAG_READ
-#if [ -z "$IPMONITOR_APP_TAG_READ" ]
-#then
-#    echo "Using default and installing $IPMONITOR_APP_TAG"
-#else
-#    export IPMONITOR_APP_TAG=$IPMONITOR_APP_TAG_READ
-#    echo "Using provided tag: $IPMONITOR_APP_TAG"
-#fi
-#fi
-#echo ""
-#
-#
-###Read domain name from user, which user  set for instance and start certificate installation for this domain
-##if ! [ -z "$2" ]
-##then
-##export DOMAIN=$2
-##else
-##echo "Let's get the exact domain IPMonitor will be installed on"
-##echo "Make sure that you have a Host A DNS record pointing to this instance!"
-##echo "This will be used for TLS 🔐"
-##echo "ie: test.IPMONITOR.net (NOT an IP address)"
-##read -r DOMAIN
-##export DOMAIN=$DOMAIN
-##
-##
-##
-##
-##fi
-##echo "Ok we'll set up certs for https://$DOMAIN"
-##echo ""
-##echo "We will need sudo access so the next question is for you to give us superuser access"
-##echo "Please enter your sudo password now:"
-##sudo echo ""
-##echo "Thanks! 🙏"
-##echo ""
-##echo "Ok! We'll take it from here 🚀"
-##
-##echo "Making sure any stack that might exist is stopped"
-##sudo -E docker compose -f docker-compose.yml stop &> /dev/null || true
 echo "We need your sudo session to proceed. Thanks a lot"
 if [ $EUID != 0 ]; then
     sudo "$0" "$@"
     exit $?
 fi
-echo "Preparing working dir"
+
 
 echo "Update apt cache and install tools:"
 sudo apt update
 sudo apt install make git -y
-
+echo ""
+echo "Preparing working dir"
 echo "Checking application folder if it exists, just pull git reporsitory to update version, if not, create dir and git clone installer repo"
-check_folder ${APP_PATH}
-if [[ $? -eq 0 ]]; then
+
+if [[ $(check_folder ${APP_PATH}) -eq 0 ]]; then
     echo "Project folder exists and is not empty."
 #  sudo mv ${APP_PATH} /opt/ipmonitor-bak
     cd ${APP_PATH}
@@ -166,6 +99,7 @@ else
   sudo chown $(whoami):$(whoami) ${APP_PATH}
   git clone --branch install git@github.com:givqer/ipmonitor-install.git .
 fi
+
 
 ls -la ${APP_PATH}
 
