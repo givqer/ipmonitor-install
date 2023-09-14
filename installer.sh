@@ -73,21 +73,21 @@ set -e
     docker --version
     sudo usermod -aG docker $USER
 }
-echo "We need your sudo session to proceed. Thanks a lot"
-if [ $EUID != 0 ]; then
-    sudo "$0" "$@"
-    exit $?
-fi
+#echo "We need your sudo session to proceed. Thanks a lot"
+#if [ $EUID != 0 ]; then
+#    sudo "$0" "$@"
+#    exit $?
+#fi
 
 
 echo "Update apt cache and install tools:"
 sudo apt update
-sudo apt install make git -y
+sudo apt install make git -y;
 echo ""
 echo "Preparing working dir"
 echo "Checking application folder if it exists, just pull git reporsitory to update version, if not, create dir and git clone installer repo"
-
-if [ $? eq 0 ]; then
+check_folder $APP_PATH
+  if [[ $? eq 0 ]]; then
     echo "Project folder exists and is not empty."
 #  sudo mv ${APP_PATH} /opt/ipmonitor-bak
     cd /opt/ipmonitor
@@ -105,7 +105,7 @@ fi
 
 
 
-ls -la ${APP_PATH}
+ls -la $APP_PATH
 
 echo "Checking if .env file exists. If it doesn't exist, copy from template"
 if [ ! -f ${APP_PATH}/.env ]; then
