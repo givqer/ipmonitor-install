@@ -11,21 +11,17 @@ APP_PATH="/opt/ipmonitor"
 #set -eux
 	check_folder() {
     if [[ -z $1 ]]; then
-        echo "Error: The folder_path parameter is required."
+        echo "Error: Folder path not provided."
         return 1
     fi
+
     local folder_path="$1"
-    if [[ ! -d $folder_path ]]; then
-        echo "Folder does not exist."
+
+    if [[ -d $folder_path && -n $(ls -A $folder_path) ]]; then
+        return 0
+    else
         return 1
     fi
-
-    if [[ -z $(ls -A $folder_path) ]]; then
-        echo "Folder is empty."
-        return 1
-    fi
-
-    return 0
 }
 
 	check_docker_version() {
@@ -80,9 +76,22 @@ sudo apt install make git -y;
 echo ""
 echo "Preparing working dir"
 echo "Checking application folder if it exists, just pull git reporsitory to update version, if not, create dir and git clone installer repo"
-check_folder $APP_PATH
-  if [[ $? eq 0 ]]; then
-    echo "Project folder exists and is not empty."
+#check_folder $APP_PATH
+#  if [[ $? eq 0 ]]; then
+#    echo "Project folder exists and is not empty."
+##  sudo mv ${APP_PATH} /opt/ipmonitor-bak
+#    cd /opt/ipmonitor
+#    git pull
+#else
+#  echo "Project folder does not exist or is empty."
+#  sudo mkdir -p $APP_PATH
+#  cd $APP_PATH
+#  sudo chown $(whoami):$(whoami) $APP_PATH
+#  git clone --branch install git@github.com:givqer/ipmonitor-install.git .
+#fi
+
+	if check_folder "$APP_PATH"; then
+        echo "Project folder exists and is not empty."
 #  sudo mv ${APP_PATH} /opt/ipmonitor-bak
     cd /opt/ipmonitor
     git pull
