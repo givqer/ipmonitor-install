@@ -87,7 +87,7 @@ echo ""
 echo "Preparing working dir"
 echo "Checking application folder if it exists, just pull git reporsitory to update version, if not, create dir and git clone installer repo"
 
-if [[ $(check_folder ${APP_PATH}) -eq 0 ]]; then
+if [[ $(check_folder /opt/ipmonitor) ]]; then
     echo "Project folder exists and is not empty."
 #  sudo mv ${APP_PATH} /opt/ipmonitor-bak
     cd ${APP_PATH}
@@ -99,6 +99,10 @@ else
   sudo chown $(whoami):$(whoami) ${APP_PATH}
   git clone --branch install git@github.com:givqer/ipmonitor-install.git .
 fi
+
+
+
+
 
 
 ls -la ${APP_PATH}
