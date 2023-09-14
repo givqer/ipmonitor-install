@@ -141,7 +141,11 @@ set -e
 ##
 ##echo "Making sure any stack that might exist is stopped"
 ##sudo -E docker compose -f docker-compose.yml stop &> /dev/null || true
-
+echo "We need your sudo session to proceed. Thanks a lot"
+if [ $EUID != 0 ]; then
+    sudo "$0" "$@"
+    exit $?
+fi
 echo "Preparing working dir"
 
 echo "Update apt cache and install tools:"
