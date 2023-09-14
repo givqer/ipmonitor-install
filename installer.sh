@@ -8,7 +8,7 @@
 
 
 APP_PATH="/opt/ipmonitor"
-set -eux
+#set -eux
 	check_folder() {
     if [[ -z $1 ]]; then
         echo "Error: The folder_path parameter is required."
