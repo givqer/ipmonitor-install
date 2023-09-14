@@ -1,0 +1,210 @@
+version: '3.9'
+services:
+
+  nginx:
+    image: ipmonitor/nginx:${APP_VERSION:-latest}
+    build:
+      context: .
+      target: nginx-server
+    ports:
+      - ${NGINX_HTTP:-80}:80
+      - ${NGINX_HTTPS:-443}:443
+    environment:
+      FPM_HOST: php-fpm:9000
+    depends_on:
+      - node
+      - php-fpm
+    restart: on-failure
+    networks:
+      - ipmonitor-2023
+
+  workspace:
+    image: ipmonitor/workspace:${APP_VERSION:-latest}
+    build:
+      context: .
+      target: php-workspace
+    user: ${CURRENT_UID}:${CURRENT_GID}
+    command: [ /bin/bash ]
+    tty: true
+    stdin_open: true
+    depends_on:
+      - mailhog
+      - mysql
+      - redis
+    restart: on-failure
+    networks:
+      - ipmonitor-2023
+
+  php-fpm:
+    image: ipmonitor/fpm:${APP_VERSION:-latest}
+    build:
+      context: .
+      target: php-fpm
+    user: ${CURRENT_UID}:${CURRENT_GID}
+    volumes:
+      - /etc/group:/etc/group:ro
+      - /etc/passwd:/etc/passwd:ro
+      - ./src:/var/www/app
+    depends_on:
+      - mailhog
+      - mysql
+      - redis
+    restart: on-failure
+    networks:
+      - ipmonitor-2023
+
+  mysql:
+    image: mysql:8.0
+    ports:
+      - ${FORWARD_DB_PORT:-3306}:3306
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    volumes:
+      - ipmonitor-2023-mysql:/var/lib/mysql
+    restart: on-failure
+    networks:
+      - ipmonitor-2023
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping" ]
+
+  redis:
+    image: redis:7.0.11
+    ports:
+      - ${FORWARD_REDIS_PORT:-6379}:6379
+    volumes:
+      - ipmonitor-2023-redis:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+    restart: on-failure
+    networks:
+      - ipmonitor-2023
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports:
+      - ${FORWARD_MAILHOG_PORT:-1025}:1025
+      - ${FORWARD_MAILHOG_DASHBOARD_PORT:-8025}:8025
+    restart: on-failure
+    networks:
+      - ipmonitor-2023
+    logging:
+      driver: none
+
+  dns-consumer:
+    build:
+      context: .
+      target: php-workspace
+    user: ${CURRENT_UID}:${CURRENT_GID}
+    command: php artisan dns:consume
+    depends_on:
+      - mailhog
+      - mysql
+      - redis
+    healthcheck:
+      test: [ "CMD", "php", "artisan", "system-health:check" ]
+    restart: unless-stopped
+    networks:
+      - ipmonitor-2023
+
+  rdns-consumer:
+    build:
+      context: .
+      target: php-workspace
+    user: ${CURRENT_UID}:${CURRENT_GID}
+    command: php artisan rdns:consume
+    depends_on:
+      - mailhog
+      - mysql
+      - redis
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "php", "artisan", "system-health:check" ]
+    networks:
+      - ipmonitor-2023
+
+  senderscore-consumer:
+    build:
+      context: .
+      target: php-workspace
+    user: ${CURRENT_UID}:${CURRENT_GID}
+    command: php artisan senderscore:consume
+    depends_on:
+      - mailhog
+      - mysql
+      - redis
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "php", "artisan", "system-health:check" ]
+    networks:
+      - ipmonitor-2023
+
+  snds-consumer:
+    build:
+      context: .
+      target: php-workspace
+    user: ${CURRENT_UID}:${CURRENT_GID}
+    command: php artisan snds:consume
+    depends_on:
+      - mailhog
+      - mysql
+      - redis
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "php", "artisan", "system-health:check" ]
+    networks:
+      - ipmonitor-2023
+
+  db-consumer:
+    build:
+      context: .
+      target: php-workspace
+    user: ${CURRENT_UID}:${CURRENT_GID}
+    command: php artisan db:consume
+    volumes:
+      - /etc/group:/etc/group:ro
+      - /etc/passwd:/etc/passwd:ro
+      - ./src:/var/www/app
+    depends_on:
+      - mailhog
+      - mysql
+      - redis
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "php", "artisan", "system-health:check" ]
+    networks:
+      - ipmonitor-2023
+
+  notifications-consumer:
+    build:
+      context: .
+      target: php-workspace
+    user: ${CURRENT_UID}:${CURRENT_GID}
+    command: php artisan ipm-notifications:consume
+    volumes:
+      - /etc/group:/etc/group:ro
+      - /etc/passwd:/etc/passwd:ro
+      - ./src:/var/www/app
+    depends_on:
+      - mailhog
+      - mysql
+      - redis
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "php", "artisan", "system-health:check" ]
+    networks:
+      - ipmonitor-2023
+
+networks:
+  ipmonitor-2023:
+    driver: bridge
+
+volumes:
+  ipmonitor-2023-mysql:
+    driver: local
+  ipmonitor-2023-mysql-test:
+    driver: local
+  ipmonitor-2023-redis:
+    driver: local
