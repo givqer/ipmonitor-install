@@ -12,7 +12,7 @@ export CURRENT_UID
 export CURRENT_GID
 export ARCH
 
-dc-init-app: dc-add-host dc-up dc-init
+dc-init-app: dc-pull dc-add-host dc-up dc-init
 
 dc-up:
 	docker compose up --scale dns-consumer=3 -d
@@ -50,7 +50,7 @@ dc-kill:
 	docker compose --profile=testing down
 
 dc-pull:
-	docker compose pull
+	docker compose pull php-fpm nginx workspace
 
 dc-bash:
 	docker compose exec workspace bash

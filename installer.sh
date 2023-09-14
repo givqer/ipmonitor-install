@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+#set -e
 
 #export  IPMONITOR_APP_TAG="${IPMONITOR_APP_TAG:-latest}"
 ##export SENTRY_DSN="${SENTRY_DSN:-'https://public@sentry.example.com/1'}"
@@ -68,13 +68,16 @@ set -e
 echo "Preparing working dir"
 
 echo "Update apt cache and install tools:"
-sudo apt update
-sudo apt install make git -y
-
-sudo git clone git@github.com:givqer/ipmonitor-install.git /opt/ipmonitor
+#sudo apt update
+#sudo apt install make git -y
+sudo mkdir -p /opt/ipmonitor
 sudo chown $(id -u):$(id -g) /opt/ipmonitor
+git clone git@github.com:givqer/ipmonitor-install.git /opt/ipmonitor
+
 cd /opt/ipmonitor
 cp .env.install .env
+cat ~/docker-pass.txt | docker login --username alex.bazaly@drumncode.com --password-stdin
+
 sudo make dc-init-app
 
 

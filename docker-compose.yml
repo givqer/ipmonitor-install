@@ -12,7 +12,6 @@ services:
     environment:
       FPM_HOST: php-fpm:9000
     depends_on:
-      - node
       - php-fpm
     restart: on-failure
     networks:
