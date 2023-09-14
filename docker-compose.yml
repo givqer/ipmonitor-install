@@ -1,7 +1,6 @@
 version: '3.9'
 services:
 
-
   nginx:
     image: ipmonitor/nginx:${APP_VERSION:-latest}
     build:
@@ -23,7 +22,7 @@ services:
     build:
       context: .
       target: php-workspace
-    user: ${CURRENT_UID}:${CURRENT_GID}
+    user: ${CURRENT_UID}:www-data
     command: [ /bin/bash ]
     tty: true
     stdin_open: true
@@ -32,6 +31,8 @@ services:
       - mysql
       - redis
     restart: on-failure
+    volumes:
+      - ./.env:/var/www/app/.env
     networks:
       - ipmonitor-2023
 
@@ -40,16 +41,14 @@ services:
     build:
       context: .
       target: php-fpm
-    user: ${CURRENT_UID}:${CURRENT_GID}
-    volumes:
-      - /etc/group:/etc/group:ro
-      - /etc/passwd:/etc/passwd:ro
-      - ./src:/var/www/app
+    user: www-data:www-data
     depends_on:
       - mailhog
       - mysql
       - redis
     restart: on-failure
+    volumes:
+      - ./.env:/var/www/app/.env
     networks:
       - ipmonitor-2023
 

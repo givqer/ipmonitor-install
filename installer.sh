@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+APP_PATH=/opt/ipmonitor
 #set -e
 
 #export  IPMONITOR_APP_TAG="${IPMONITOR_APP_TAG:-latest}"
@@ -72,12 +72,12 @@ echo "Update apt cache and install tools:"
 #sudo apt install make git -y
 sudo mkdir -p /opt/ipmonitor
 sudo chown $(id -u):$(id -g) /opt/ipmonitor
-git clone git@github.com:givqer/ipmonitor-install.git /opt/ipmonitor
-
-
-cp .env.install .env
+cp ${APP_PATH}/.env.install ${APP_PATH}.env
+cd ${APP_PATH}
+git clone --branch install git@github.com:givqer/ipmonitor-install.git /opt/ipmonitor
+pwd
 cat ~/docker-pass.txt | docker login --username alex.bazaly@drumncode.com --password-stdin
-cd /opt/ipmonitor
+
 sudo make dc-init-app
 
 
