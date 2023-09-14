@@ -7,7 +7,7 @@
 #echo ${DIR}
 
 
-APP_PATH=/opt/ipmonitor
+APP_PATH="/opt/ipmonitor"
 set -e
 	check_folder() {
     if [[ -z $1 ]]; then
