@@ -145,10 +145,10 @@ set -e
 echo "Preparing working dir"
 
 echo "Update apt cache and install tools:"
-#sudo apt update
-#sudo apt install make git -y
+sudo apt update
+sudo apt install make git -y
 
-
+echo "Checking application folder if it exists, just pull git reporsitory to update version, if not, create dir and git clone installer repo"
 check_folder ${APP_PATH}
 if [[ $? -eq 0 ]]; then
     echo "Project folder exists and is not empty."
@@ -173,7 +173,7 @@ fi
 echo "Checking if docker installed, if installed, what version is installed"
 check_docker_version
 if [ -z "$(check_docker_version)" ]; then
-  echo "dsocker isn't installed";
+  echo "docker isn't installed";
   echo ""
   echo "Proceed to install docker "
 fi
