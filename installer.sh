@@ -8,6 +8,7 @@
 
 
 APP_PATH="/opt/ipmonitor"
+echo $APP_PATH
 #set -eux
 	check_folder() {
     if [[ -z $1 ]]; then
