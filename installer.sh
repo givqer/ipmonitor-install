@@ -8,7 +8,7 @@
 
 
 APP_PATH="/opt/ipmonitor"
-set -e
+set -eux
 	check_folder() {
     if [[ -z $1 ]]; then
         echo "Error: The folder_path parameter is required."
@@ -50,13 +50,10 @@ set -e
         echo "Error: This function requires root privileges."
         return 1
     fi
-
     # Update the package lists
    sudo apt-get update
-
     # Install required packages to allow apt to use a repository over HTTPS
     sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
-
     # Add Docker's official GPG key
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 
@@ -65,10 +62,7 @@ set -e
 
     # Update the package lists (again) to include the Docker packages
    sudo apt-get update
-
     # Install the latest version of Docker
-   sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-
     # Verify that Docker is installed and running
     docker --version
     sudo usermod -aG docker $USER
