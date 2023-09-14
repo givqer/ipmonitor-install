@@ -94,9 +94,7 @@ services:
       driver: none
 
   dns-consumer:
-    build:
-      context: .
-      target: php-workspace
+    image: ipmonitor/workspace:${APP_VERSION:-latest}
     user: ${CURRENT_UID}:${CURRENT_GID}
     command: php artisan dns:consume
     depends_on:
@@ -110,9 +108,7 @@ services:
       - ipmonitor-2023
 
   rdns-consumer:
-    build:
-      context: .
-      target: php-workspace
+    image: ipmonitor/workspace:${APP_VERSION:-latest}
     user: ${CURRENT_UID}:${CURRENT_GID}
     command: php artisan rdns:consume
     depends_on:
@@ -126,9 +122,7 @@ services:
       - ipmonitor-2023
 
   senderscore-consumer:
-    build:
-      context: .
-      target: php-workspace
+    image: ipmonitor/workspace:${APP_VERSION:-latest}
     user: ${CURRENT_UID}:${CURRENT_GID}
     command: php artisan senderscore:consume
     depends_on:
@@ -142,9 +136,7 @@ services:
       - ipmonitor-2023
 
   snds-consumer:
-    build:
-      context: .
-      target: php-workspace
+    image: ipmonitor/workspace:${APP_VERSION:-latest}
     user: ${CURRENT_UID}:${CURRENT_GID}
     command: php artisan snds:consume
     depends_on:
@@ -158,15 +150,9 @@ services:
       - ipmonitor-2023
 
   db-consumer:
-    build:
-      context: .
-      target: php-workspace
+    image: ipmonitor/workspace:${APP_VERSION:-latest}
     user: ${CURRENT_UID}:${CURRENT_GID}
     command: php artisan db:consume
-    volumes:
-      - /etc/group:/etc/group:ro
-      - /etc/passwd:/etc/passwd:ro
-      - ./src:/var/www/app
     depends_on:
       - mailhog
       - mysql
@@ -178,15 +164,12 @@ services:
       - ipmonitor-2023
 
   notifications-consumer:
+    image: ipmonitor/workspace:${APP_VERSION:-latest}
     build:
       context: .
       target: php-workspace
     user: ${CURRENT_UID}:${CURRENT_GID}
     command: php artisan ipm-notifications:consume
-    volumes:
-      - /etc/group:/etc/group:ro
-      - /etc/passwd:/etc/passwd:ro
-      - ./src:/var/www/app
     depends_on:
       - mailhog
       - mysql
