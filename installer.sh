@@ -65,14 +65,12 @@ else
   echo "Switched to working directory"
   git clone --branch install https://github.com/givqer/ipmonitor-install.git .
   echo "Cloned installer files from public repository into $APP_PATH"
-  echo "Checking if .env file exists. If it doesn't exist, copy from template"
-    if [ ! -f ${APP_PATH}/.env ]; then
-      cp ${APP_PATH}/.env.install ${APP_PATH}/.env || exit
-      echo "Template .env copied to .env"
-    fi
-
 fi
-
+#  echo "Checking if .env file exists. If it doesn't exist, copy from template"
+#    if [ ! -f ${APP_PATH}/.env ]; then
+#      cp ${APP_PATH}/.env.install ${APP_PATH}/.env || exit
+#      echo "Template .env copied to .env"
+#    fi
 
 #echo ""
 #echo "===================Docker section ======================="
