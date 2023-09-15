@@ -63,7 +63,7 @@ else
   echo "Folder $APP_PATH chowned by current user: $(whoami)"
   cd $APP_PATH || exit
   echo "Switched to working directory"
-  git clone --branch install https://github.com/givqer/ipmonitor-install.git . &2>&1 /dev/null
+  git clone --branch install https://github.com/givqer/ipmonitor-install.git .
   echo "Cloned installer files from public repository into $APP_PATH"
   echo "Checking if .env file exists. If it doesn't exist, copy from template"
     if [ ! -f ${APP_PATH}/.env ]; then
@@ -74,37 +74,37 @@ else
 fi
 
 
-echo ""
-echo "===================Docker section ======================="
-
-echo "Checking if docker installed, if installed, what version is installed"
-check_docker_version
+#echo ""
+#echo "===================Docker section ======================="
+#
+#echo "Checking if docker installed, if installed, what version is installed"
+#check_docker_version
+##if [ -z "$(check_docker_version)" ]; then
+##  echo "docker isn't installed";
+##  echo ""
+##  dockerinstalled=0
+##fi
 #if [ -z "$(check_docker_version)" ]; then
-#  echo "docker isn't installed";
-#  echo ""
-#  dockerinstalled=0
+#echo "installing docker:"
+##from official docs here: https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
+## Add Docker's official GPG key:
+#sudo apt-get install ca-certificates curl gnupg
+#sudo install -m 0755 -d /etc/apt/keyrings
+#curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+#sudo chmod a+r /etc/apt/keyrings/docker.gpg
+#
+## Add the repository to Apt sources:
+#echo \
+#  "deb [arch=\"$(dpkg --print-architecture)\" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+#  \"$(. /etc/os-release && echo "$VERSION_CODENAME")\" stable" | \
+#  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+#sudo apt-get update
+#sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+#echo "Docker version installed: $(check_docker_version)"
 #fi
-if [ -z "$(check_docker_version)" ]; then
-echo "installing docker:"
-#from official docs here: https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
-# Add Docker's official GPG key:
-sudo apt-get install ca-certificates curl gnupg
-sudo install -m 0755 -d /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-sudo chmod a+r /etc/apt/keyrings/docker.gpg
-
-# Add the repository to Apt sources:
-echo \
-  "deb [arch=\"$(dpkg --print-architecture)\" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-  \"$(. /etc/os-release && echo "$VERSION_CODENAME")\" stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
-echo "Docker version installed: $(check_docker_version)"
-fi
-
-
-cd ${APP_PATH} || exit
-cat ~/pass.txt | docker login https://index.docker.io/v1/ --username alexbazdnc --password-stdin
-
-make dc-init-app
+#
+#
+#cd ${APP_PATH} || exit
+#cat ~/pass.txt | docker login https://index.docker.io/v1/ --username alexbazdnc --password-stdin
+#
+#make dc-init-app
