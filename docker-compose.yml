@@ -15,7 +15,7 @@ services:
       - php-fpm
     restart: on-failure
     networks:
-      - ipmonitor-2023
+      - ipmonitor
 
   workspace:
     image: ipmonitor/workspace:${APP_VERSION:-latest}
@@ -34,7 +34,7 @@ services:
     volumes:
       - ./.env:/var/www/app/.env
     networks:
-      - ipmonitor-2023
+      - ipmonitor
 
   php-fpm:
     image: ipmonitor/fpm:${APP_VERSION:-latest}
@@ -50,7 +50,7 @@ services:
     volumes:
       - ./.env:/var/www/app/.env
     networks:
-      - ipmonitor-2023
+      - ipmonitor
 
   mysql:
     image: mysql:8.0
@@ -62,10 +62,10 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     volumes:
-      - ipmonitor-2023-mysql:/var/lib/mysql
+      - ipmonitor-mysql:/var/lib/mysql
     restart: on-failure
     networks:
-      - ipmonitor-2023
+      - ipmonitor
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping" ]
 
@@ -74,12 +74,12 @@ services:
     ports:
       - ${FORWARD_REDIS_PORT:-6379}:6379
     volumes:
-      - ipmonitor-2023-redis:/data
+      - ipmonitor-redis:/data
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
     restart: on-failure
     networks:
-      - ipmonitor-2023
+      - ipmonitor
 
   mailhog:
     image: mailhog/mailhog:latest
@@ -88,7 +88,7 @@ services:
       - ${FORWARD_MAILHOG_DASHBOARD_PORT:-8025}:8025
     restart: on-failure
     networks:
-      - ipmonitor-2023
+      - ipmonitor
     logging:
       driver: none
 
@@ -104,7 +104,7 @@ services:
       test: [ "CMD", "php", "artisan", "system-health:check" ]
     restart: unless-stopped
     networks:
-      - ipmonitor-2023
+      - ipmonitor
 
   rdns-consumer:
     image: ipmonitor/workspace:${APP_VERSION:-latest}
@@ -118,7 +118,7 @@ services:
     healthcheck:
       test: [ "CMD", "php", "artisan", "system-health:check" ]
     networks:
-      - ipmonitor-2023
+      - ipmonitor
 
   senderscore-consumer:
     image: ipmonitor/workspace:${APP_VERSION:-latest}
@@ -132,7 +132,7 @@ services:
     healthcheck:
       test: [ "CMD", "php", "artisan", "system-health:check" ]
     networks:
-      - ipmonitor-2023
+      - ipmonitor
 
   snds-consumer:
     image: ipmonitor/workspace:${APP_VERSION:-latest}
@@ -146,7 +146,7 @@ services:
     healthcheck:
       test: [ "CMD", "php", "artisan", "system-health:check" ]
     networks:
-      - ipmonitor-2023
+      - ipmonitor
 
   db-consumer:
     image: ipmonitor/workspace:${APP_VERSION:-latest}
@@ -160,7 +160,7 @@ services:
     healthcheck:
       test: [ "CMD", "php", "artisan", "system-health:check" ]
     networks:
-      - ipmonitor-2023
+      - ipmonitor
 
   notifications-consumer:
     image: ipmonitor/workspace:${APP_VERSION:-latest}
@@ -177,16 +177,16 @@ services:
     healthcheck:
       test: [ "CMD", "php", "artisan", "system-health:check" ]
     networks:
-      - ipmonitor-2023
+      - ipmonitor
 
 networks:
-  ipmonitor-2023:
+  ipmonitor:
     driver: bridge
 
 volumes:
-  ipmonitor-2023-mysql:
+  ipmonitor-mysql:
     driver: local
-  ipmonitor-2023-mysql-test:
+  ipmonitor-mysql-test:
     driver: local
-  ipmonitor-2023-redis:
+  ipmonitor-redis:
     driver: local

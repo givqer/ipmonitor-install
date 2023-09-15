@@ -1,16 +1,7 @@
 #!/bin/bash
 export DEBIAN_FRONTEND=noninteractive
-#include functions.sh
-# Full path of the current script
-#THIS=`readlink -f "${BASH_SOURCE[0]}" 2>/dev/null || echo $0`
-#DIR=`dirname "${THIS}"`
-#source "$DIR/functions.sh"
-#echo ${DIR}
-
 
 APP_PATH="/opt/ipmonitor"
-echo $APP_PATH
-#set -eux
 	check_folder() {
     if [[ -z $1 ]]; then
         echo "Error: Folder path not provided."
@@ -56,33 +47,20 @@ echo "Update apt cache and install tools:"
 echo ""
 echo "Preparing working dir"
 echo "Checking application folder if it exists, just pull git reporsitory to update version, if not, create dir and git clone installer repo"
-
+echo "..."
 
 if check_folder "$APP_PATH"; then
  echo "Project folder exists and is not empty."
  cd /opt/ipmonitor || exit
- ls -la
+ echo "We should stop existing stack if it's running. Please, be sure to backup your data if you are upgrading your version"
+ sudo -E docker-compose -f docker-compose.yml stop &> /dev/null || true
 else
   echo "Project folder does not exist or is empty."
   sudo mkdir -p $APP_PATH
-  cd $APP_PATH || exit
   sudo chown "$(whoami)":"$(whoami)" $APP_PATH
-  git clone --branch install git@github.com:givqer/ipmonitor-install.git .
+  cd $APP_PATH || exit
+  git clone --branch install https://github.com/givqer/ipmonitor-install.git .
 fi
-
-#	if check_folder "$APP_PATH"; then
-#        echo "Project folder exists and is not empty."
-##  sudo mv ${APP_PATH} /opt/ipmonitor-bak
-#    cd /opt/ipmonitor
-#    git pull
-#else
-#  echo "Project folder does not exist or is empty."
-#  sudo mkdir -p $APP_PATH
-#  cd $APP_PATH
-#  sudo chown $(whoami):$(whoami) $APP_PATH
-#  git clone --branch install git@github.com:givqer/ipmonitor-install.git .
-#fi
-
 
 echo "Checking if .env file exists. If it doesn't exist, copy from template"
 if [ ! -f ${APP_PATH}/.env ]; then
@@ -97,7 +75,7 @@ fi
 #  echo "Proceed to install docker "
 #fi
 #
-cd ${APP_PATH}
+cd ${APP_PATH} | exit
 cat ~/pass.txt | docker login https://index.docker.io/v1/ --username alexbazdnc --password-stdin
 
 make dc-init-app
