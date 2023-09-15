@@ -17,21 +17,21 @@ APP_PATH="/opt/ipmonitor"
     fi
 }
 
-	check_docker_version() {
-    if ! command -v docker &> /dev/null; then
-        echo "Error: Docker is not installed."
-        return 1
-    fi
-
-    local docker_version=$(docker version --format '{{.Server.Version}}' 2>&1)
-    if [[ $? -ne 0 ]]; then
-        echo "Error: Failed to retrieve Docker version."
-        return 1
-    fi
-
-    echo "$docker_version"
-
-}
+#	check_docker_version() {
+#    if ! command -v docker &> /dev/null; then
+#        echo "Error: Docker is not installed."
+#        return 1
+#    fi
+#
+#    local docker_version=$(docker version --format '{{.Server.Version}}' 2>&1)
+#    if [[ $? -ne 0 ]]; then
+#        echo "Error: Failed to retrieve Docker version."
+#        return 1
+#    fi
+#
+#    echo "$docker_version"
+#
+#}
 
 
 
