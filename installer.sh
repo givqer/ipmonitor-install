@@ -50,7 +50,7 @@ echo "Preparing working dir"
 echo "Checking application folder if it exists, just pull git reporsitory to update version, if not, create dir and git clone installer repo"
 echo "..."
 
-if check_folder "$APP_PATH"; then
+if [[ -d $APP_PATH && -n $(ls -A "$APP_PATH") ]]; then
  echo "Project folder exists and is not empty."
  cd /opt/ipmonitor || exit
  echo "We should stop existing stack if it's running. Please, be sure to backup your data if you are upgrading your version"
