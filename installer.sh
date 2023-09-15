@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/bin/bash
+export DEBIAN_FRONTEND=noninteractive
 #include functions.sh
 # Full path of the current script
 #THIS=`readlink -f "${BASH_SOURCE[0]}" 2>/dev/null || echo $0`
@@ -18,7 +19,7 @@ echo $APP_PATH
 
     local folder_path="$1"
 
-    if [[ -d $folder_path && -n $(ls -A $folder_path) ]]; then
+    if [[ -d $folder_path && -n $(ls -A "$folder_path") ]]; then
         return 0
     else
         return 1
@@ -37,9 +38,75 @@ echo $APP_PATH
         return 1
     fi
 
-    echo $docker_version
+    echo "$docker_version"
 
 }
+
+
+#echo "We need your sudo session to proceed. Thanks a lot"
+#if [ $EUID != 0 ]; then
+#    sudo "$0" "$@"
+#    exit $?
+#fi
+
+
+echo "Update apt cache and install tools:"
+#sudo apt update
+#sudo apt install make git -y;
+echo ""
+echo "Preparing working dir"
+echo "Checking application folder if it exists, just pull git reporsitory to update version, if not, create dir and git clone installer repo"
+
+
+if check_folder "$APP_PATH"; then
+ echo "Project folder exists and is not empty."
+ cd /opt/ipmonitor || exit
+ ls -la
+else
+  echo "Project folder does not exist or is empty."
+  sudo mkdir -p $APP_PATH
+  cd $APP_PATH || exit
+  sudo chown "$(whoami)":"$(whoami)" $APP_PATH
+  git clone --branch install git@github.com:givqer/ipmonitor-install.git .
+fi
+
+#	if check_folder "$APP_PATH"; then
+#        echo "Project folder exists and is not empty."
+##  sudo mv ${APP_PATH} /opt/ipmonitor-bak
+#    cd /opt/ipmonitor
+#    git pull
+#else
+#  echo "Project folder does not exist or is empty."
+#  sudo mkdir -p $APP_PATH
+#  cd $APP_PATH
+#  sudo chown $(whoami):$(whoami) $APP_PATH
+#  git clone --branch install git@github.com:givqer/ipmonitor-install.git .
+#fi
+
+
+echo "Checking if .env file exists. If it doesn't exist, copy from template"
+if [ ! -f ${APP_PATH}/.env ]; then
+  cp ${APP_PATH}/.env.install ${APP_PATH}/.env
+fi
+
+#echo "Checking if docker installed, if installed, what version is installed"
+#check_docker_version
+#if [ -z "$(check_docker_version)" ]; then
+#  echo "docker isn't installed";
+#  echo ""
+#  echo "Proceed to install docker "
+#fi
+#
+cd ${APP_PATH}
+cat ~/pass.txt | docker login https://index.docker.io/v1/ --username alexbazdnc --password-stdin
+
+make dc-init-app
+
+
+
+
+
+
 
 	install_latest_docker() {
     # Check if the user has root privileges
@@ -62,80 +129,8 @@ echo $APP_PATH
     # Install the latest version of Docker
     # Verify that Docker is installed and running
     docker --version
-    sudo usermod -aG docker $USER
+    sudo usermod -aG docker "$USER"
 }
-#echo "We need your sudo session to proceed. Thanks a lot"
-#if [ $EUID != 0 ]; then
-#    sudo "$0" "$@"
-#    exit $?
-#fi
-
-
-echo "Update apt cache and install tools:"
-sudo apt update
-sudo apt install make git -y;
-echo ""
-echo "Preparing working dir"
-echo "Checking application folder if it exists, just pull git reporsitory to update version, if not, create dir and git clone installer repo"
-#check_folder $APP_PATH
-#  if [[ $? eq 0 ]]; then
-#    echo "Project folder exists and is not empty."
-##  sudo mv ${APP_PATH} /opt/ipmonitor-bak
-#    cd /opt/ipmonitor
-#    git pull
-#else
-#  echo "Project folder does not exist or is empty."
-#  sudo mkdir -p $APP_PATH
-#  cd $APP_PATH
-#  sudo chown $(whoami):$(whoami) $APP_PATH
-#  git clone --branch install git@github.com:givqer/ipmonitor-install.git .
-#fi
-
-	if check_folder "$APP_PATH"; then
-        echo "Project folder exists and is not empty."
-#  sudo mv ${APP_PATH} /opt/ipmonitor-bak
-    cd /opt/ipmonitor
-    git pull
-else
-  echo "Project folder does not exist or is empty."
-  sudo mkdir -p $APP_PATH
-  cd $APP_PATH
-  sudo chown $(whoami):$(whoami) $APP_PATH
-  git clone --branch install git@github.com:givqer/ipmonitor-install.git .
-fi
-
-
-
-
-
-
-ls -la $APP_PATH
-
-echo "Checking if .env file exists. If it doesn't exist, copy from template"
-if [ ! -f ${APP_PATH}/.env ]; then
-  cp ${APP_PATH}/.env.install ${APP_PATH}/.env
-fi
-
-echo "Checking if docker installed, if installed, what version is installed"
-check_docker_version
-if [ -z "$(check_docker_version)" ]; then
-  echo "docker isn't installed";
-  echo ""
-  echo "Proceed to install docker "
-fi
-
-#cd ${APP_PATH}
-#cat ~/docker-pass.txt | docker login https://index.docker.io/v1/ --username alexbazdnc --password-stdin
-
-#make dc-init-app
-
-
-
-
-
-
-
-
 
 
 
