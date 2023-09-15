@@ -59,7 +59,7 @@ else
   echo "Project folder does not exist or is empty."
   sudo mkdir -p $APP_PATH
   echo "Folder $APP_PATH created."
-  sudo chown "$(whoami)":"$(whoami)" $APP_PATH
+  sudo chown -R "$(whoami)":"$(whoami)" $APP_PATH
   echo "Folder $APP_PATH chowned by current user: $(whoami)"
   cd $APP_PATH || exit
   echo "Switched to working directory"
@@ -81,8 +81,10 @@ check_docker_version
 if [ -z "$(check_docker_version)" ]; then
   echo "docker isn't installed";
   echo ""
-  echo "Proceed to install docker "
-
+  dockerinstalled=0
+fi
+if [ $dockerinstalled == "0" ]; then
+echo "installing docker:"
 #from official docs here: https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
 # Add Docker's official GPG key:
 sudo apt-get install ca-certificates curl gnupg
