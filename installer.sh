@@ -83,7 +83,7 @@ if [ -z "$(check_docker_version)" ]; then
   echo ""
   dockerinstalled=0
 fi
-if [ $dockerinstalled == "0" ]; then
+if [ "$dockerinstalled" -eq "0" ]; then
 echo "installing docker:"
 #from official docs here: https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
 # Add Docker's official GPG key:
