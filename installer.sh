@@ -67,7 +67,7 @@ else
   echo "Cloned installer files from public repository into $APP_PATH"
   echo "Checking if .env file exists. If it doesn't exist, copy from template"
     if [ ! -f ${APP_PATH}/.env ]; then
-      cp ${APP_PATH}/.env.install ${APP_PATH}/.env
+      cp ${APP_PATH}/.env.install ${APP_PATH}/.env || exit
       echo "Template .env copied to .env"
     fi
 
@@ -79,12 +79,12 @@ echo "===================Docker section ======================="
 
 echo "Checking if docker installed, if installed, what version is installed"
 check_docker_version
+#if [ -z "$(check_docker_version)" ]; then
+#  echo "docker isn't installed";
+#  echo ""
+#  dockerinstalled=0
+#fi
 if [ -z "$(check_docker_version)" ]; then
-  echo "docker isn't installed";
-  echo ""
-  dockerinstalled=0
-fi
-if [ "$dockerinstalled" -eq "0" ]; then
 echo "installing docker:"
 #from official docs here: https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
 # Add Docker's official GPG key:
