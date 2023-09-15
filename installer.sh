@@ -97,8 +97,9 @@ echo \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
-$(check_docker_version)
+echo "Docker version installed: $(check_docker_version)"
 fi
+
 
 cd ${APP_PATH} || exit
 cat ~/pass.txt | docker login https://index.docker.io/v1/ --username alexbazdnc --password-stdin
