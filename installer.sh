@@ -65,7 +65,45 @@ else
   echo "Switched to working directory"
   git clone --branch install https://github.com/givqer/ipmonitor-install.git .
   echo "Cloned installer files from public repository into $APP_PATH"
+  cp .env.install .env
 fi
+
+#echo ""
+#echo "===================Docker section ======================="
+#
+# Check if Docker is already installed
+
+
+if ! command -v docker &> /dev/null; then
+    echo "Docker is not installed. Installing Docker..."
+    # Install Docker using the official script (for Linux)
+    curl -fsSL https://get.docker.com -o get-docker.sh
+    sudo sh get-docker.sh --version 24.0 --channel stable
+    # Start and enable the Docker service (for Linux)
+    sudo systemctl start docker
+    sudo systemctl enable docker
+    # Clean up the installation script
+    rm get-docker.sh
+    echo "Docker has been installed."
+    # Check Docker version
+docker_version=$(docker --version --format '{{.Server.Version}}' 2>&1)
+echo "Docker version: $docker_version"
+fi
+
+
+
+if command -v docker &> /dev/null; then
+    docker_version=$(docker --version --format '{{.Server.Version}}')
+  if [ "$(echo "$docker_version < 24" | bc)" -eq 1 ]; then
+    read -p "The installed Docker version may not be compatible with this script. Do you want to proceed? (yes/no): " proceed
+    if [ "$proceed" != "yes" ]; then
+        echo "Exiting script."
+        exit 1
+    fi
+  fi
+fi
+
+
 #  echo "Checking if .env file exists. If it doesn't exist, copy from template"
 #    if [ ! -f ${APP_PATH}/.env ]; then
 #      cp ${APP_PATH}/.env.install ${APP_PATH}/.env || exit
