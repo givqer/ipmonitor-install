@@ -109,7 +109,7 @@ if command -v docker &> /dev/null; then
         read -r -p "The installed Docker version may not be compatible with this script. Do you want to proceed? (yes/no): " proceed
         if [ "$proceed" != "yes" ]; then
           echo "Please install required docker version and come back to us. Exiting"
-          exit 1
+          exit 1;
         fi
     fi
 cd ${APP_PATH} || exit
