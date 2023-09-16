@@ -66,15 +66,8 @@ if ! command -v docker &> /dev/null; then
     curl -fsSL https://get.docker.com -o get-docker.sh
     sudo sh get-docker.sh --channel stable
     # Start and enable the Docker service (for Linux)
-
     sudo systemctl enable docker
-
     sudo systemctl start docker
-    process_id=$!
-    echo $process_id
-    wait $process_id
-    echo "Exit status: $?"
-    # Clean up the installation script
     rm get-docker.sh
     echo "Docker has been installed."
     echo ""
