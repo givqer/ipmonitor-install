@@ -97,41 +97,19 @@ if ! command -v docker &> /dev/null; then
 
 fi
 
+
+
 if command -v docker &> /dev/null; then
-    docker_version=$(docker --version | awk '{print $3}' | cut -d ',' -f1)
-
-    # Function to compare two version strings
-    version_compare() {
-        local version1=$1
-        local version2=$2
-        if [[ "$version1" == "$version2" ]]; then
-            return 0
-        elif [[ "$version1" < "$version2" ]]; then
-            return 1
-        else
-            return 2
-        fi
-    }
-
-    if version_compare "$docker_version" "24"; then
-        read -p "The installed Docker version may not be compatible with this script. Do you want to proceed? (yes/no): " proceed
-        if [ "$proceed" != "yes" ]; then
-            echo "Exiting script."
-            exit 1
-        fi
+    docker_version=$(docker --version)
+    res=$(echo "$docker_version < 24" | bc)
+  if [ "$res" -eq 1 ]; then
+    read -p "The installed Docker version may not be compatible with this script. Do you want to proceed? (yes/no): " proceed
+    if [ "$proceed" != "yes" ]; then
+        echo "Exiting script."
+        exit 1
     fi
 fi
-
-#if command -v docker &> /dev/null; then
-#    docker_version=$(docker --version)
-#  if [ "$(echo "$docker_version < 24" | bc)" -eq 1 ]; then
-#    read -p "The installed Docker version may not be compatible with this script. Do you want to proceed? (yes/no): " proceed
-#    if [ "$proceed" != "yes" ]; then
-#        echo "Exiting script."
-#        exit 1
-#    fi
-#fi
-#fi
+fi
 
 
 #  echo "Checking if .env file exists. If it doesn't exist, copy from template"
