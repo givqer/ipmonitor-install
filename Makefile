@@ -36,7 +36,6 @@ dc-yarn-install:
 	docker compose run --rm node yarn install --cache-folder ./node_modules/.yarn-cache
 
 dc-init:
-	sleep 60
 	docker compose up workspace -d
 	docker compose exec workspace php artisan key:generate
 	docker compose exec workspace php artisan migrate
