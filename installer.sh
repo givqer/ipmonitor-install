@@ -86,21 +86,21 @@ if ! command -v docker &> /dev/null; then
     rm get-docker.sh
     echo "Docker has been installed."
     # Check Docker version
-docker_version=$(docker --version --format '{{.Server.Version}}' 2>&1)
+docker_version=$(docker version --format '{{.Server.Version}}' 2>&1)
 echo "Docker version: $docker_version"
 fi
 
 
 
 if command -v docker &> /dev/null; then
-    docker_version=$(docker --version --format '{{.Server.Version}}')
+    docker_version=$(docker version --format '{{.Server.Version}}')
   if [ "$(echo "$docker_version < 24" | bc)" -eq 1 ]; then
     read -p "The installed Docker version may not be compatible with this script. Do you want to proceed? (yes/no): " proceed
     if [ "$proceed" != "yes" ]; then
         echo "Exiting script."
         exit 1
     fi
-  fi
+fi
 fi
 
 
