@@ -83,9 +83,12 @@ if ! command -v docker &> /dev/null; then
     # Start and enable the Docker service (for Linux)
 
     sudo systemctl enable docker
-    sleep 10
+
     sudo systemctl start docker
-    sleep 20
+    process_id=$!
+    echo $process_id
+    wait $process_id
+    echo "Exit status: $?"
     # Clean up the installation script
     rm get-docker.sh
     echo "Docker has been installed."
@@ -94,7 +97,7 @@ if ! command -v docker &> /dev/null; then
     sudo -E usermod -aG docker "$USER"
     echo "Done"
     # Check Docker version
-    docker_version=$(docker --version  2>&1)
+    docker_version=$(sudo docker --version  2>&1)
     echo "Docker version: $docker_version"
 fi
 
