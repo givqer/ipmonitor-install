@@ -2,7 +2,7 @@
 export DEBIAN_FRONTEND=noninteractive
 
 APP_PATH="/opt/ipmonitor"
-DOCKER_REQ_VERSION="34"
+DOCKER_REQ_VERSION="25"
 	check_folder() {
     if [[ -z $1 ]]; then
         echo "Error: Folder path not provided."
@@ -94,8 +94,6 @@ if ! command -v docker &> /dev/null; then
     # Check Docker version
     docker_version=$(docker --version  2>&1)
     echo "Docker version: $docker_version"
-
-
 fi
 
 
