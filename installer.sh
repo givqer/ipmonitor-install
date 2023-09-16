@@ -91,7 +91,7 @@ if ! command -v docker &> /dev/null; then
     sudo -E usermod -aG docker "$USER"
     echo "Done"
     # Check Docker version
-    docker_version=$(docker version --format '{{.Server.Version}}' 2>&1)
+    docker_version=$(docker --version  2>&1)
     echo "Docker version: $docker_version"
 
 
