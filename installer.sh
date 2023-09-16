@@ -79,7 +79,7 @@ if ! command -v docker &> /dev/null; then
     echo "Docker is not installed. Installing Docker..."
     # Install Docker using the official script (for Linux)
     curl -fsSL https://get.docker.com -o get-docker.sh
-    sudo sh get-docker.sh --version 23.0 --channel stable
+    sudo sh get-docker.sh --channel stable
     # Start and enable the Docker service (for Linux)
 
     sudo systemctl enable docker
@@ -117,11 +117,11 @@ if command -v docker &> /dev/null; then
             echo "Exiting script."
             exit 1
         fi
+
+    fi
         cd ${APP_PATH} || exit
         cat /home/ubuntu/pass.txt | sudo -E docker login https://index.docker.io/v1/ --username alexbazdnc --password-stdin
         sudo -E make dc-first-install-app
-    fi
-
 fi
 
 
