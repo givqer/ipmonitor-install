@@ -85,13 +85,15 @@ if ! command -v docker &> /dev/null; then
     # Clean up the installation script
     rm get-docker.sh
     echo "Docker has been installed."
+
+    echo ""
+    echo "Add user to docker group:"
+
+    echo "Done"
     # Check Docker version
-docker_version=$(docker version --format '{{.Server.Version}}' 2>&1)
-echo "Docker version: $docker_version"
-echo ""
-echo "Add user to docker group:"
-sudo usermod -aG docker "$USER"
-echo "Done"
+    docker_version=$(docker version --format '{{.Server.Version}}' 2>&1)
+    echo "Docker version: $docker_version"
+
 
 fi
 
