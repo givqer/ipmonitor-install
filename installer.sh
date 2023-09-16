@@ -101,15 +101,14 @@ fi
 if command -v docker &> /dev/null; then
     docker_version=$(docker --version | awk '{print $3}' | cut -d ',' -f1)
     required_version=${DOCKER_REQ_VERSION}  # Define the required major version as a string
-
+    echo $required_version
     # Extract the major version from the Docker version string
     installed_major_version=$(echo "$docker_version" | cut -d '.' -f1)
 
     if [ "$installed_major_version" -lt "$required_version" ]; then
         read -r -p "The installed Docker version may not be compatible with this script. Do you want to proceed? (yes/no): " proceed
         if [ "$proceed" != "yes" ]; then
-            echo "Exiting script."
-            exit 1
+
         fi
     fi
 cd ${APP_PATH} || exit
