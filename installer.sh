@@ -3,6 +3,13 @@ export DEBIAN_FRONTEND=noninteractive
 
 APP_PATH="/opt/ipmonitor"
 DOCKER_REQ_VERSION="24"
+
+
+
+
+
+
+
 	check_folder() {
     if [[ -z $1 ]]; then
         echo "Error: Folder path not provided."
@@ -52,6 +59,11 @@ else
   git clone --branch install https://github.com/givqer/ipmonitor-install.git .
   echo "Cloned installer files from public repository into $APP_PATH"
   cp .env.install .env
+  echo ""
+  echo "Before we sart, please, edit .environment file to correct your data from preset values to your own:"
+  echo ""
+  nano .env
+
 fi
 
 #echo ""
