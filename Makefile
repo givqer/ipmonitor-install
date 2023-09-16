@@ -13,7 +13,8 @@ export CURRENT_GID
 export ARCH
 
 
-dc-init-app: dc-pull dc-add-host dc-up dc-init
+dc-first-install-app: dc-pull dc-add-host dc-up dc-init
+dc-exists-folder-run:
 
 dc-up:
 	docker compose up --scale dns-consumer=3 -d

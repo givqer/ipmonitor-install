@@ -114,6 +114,8 @@ if command -v docker &> /dev/null; then
             exit 1
         fi
     fi
+cd ${APP_PATH} || exit
+make dc-first-install-app
 fi
 
 
