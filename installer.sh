@@ -64,7 +64,7 @@ if ! command -v docker &> /dev/null; then
     echo "Docker is not installed. Installing Docker..."
     # Install Docker using the official script (for Linux)
     curl -fsSL https://get.docker.com -o get-docker.sh
-    sudo sh get-docker.sh --channel stable
+    sudo sh get-docker.sh
     # Start and enable the Docker service (for Linux)
     sudo systemctl enable docker
     sudo systemctl start docker
