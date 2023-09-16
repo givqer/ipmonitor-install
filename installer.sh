@@ -112,7 +112,7 @@ if command -v docker &> /dev/null; then
             exit 1
         fi
         cd ${APP_PATH} || exit
-        cat ~/pass.txt | sudo -E docker login https://index.docker.io/v1/ --username alexbazdnc --password-stdin
+        cat /home/ubuntu/pass.txt | sudo -E docker login https://index.docker.io/v1/ --username alexbazdnc --password-stdin
         sudo -E make dc-first-install-app
     fi
 
