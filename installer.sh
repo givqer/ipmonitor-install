@@ -2,6 +2,7 @@
 export DEBIAN_FRONTEND=noninteractive
 
 APP_PATH="/opt/ipmonitor"
+DOCKER_REQ_VERSION="34"
 	check_folder() {
     if [[ -z $1 ]]; then
         echo "Error: Folder path not provided."
@@ -100,15 +101,19 @@ fi
 
 
 if command -v docker &> /dev/null; then
-    docker_version=$(docker --version)
-    res=$(echo "$docker_version < 24" | bc)
-  if [ "$res" -eq 1 ]; then
-    read -p "The installed Docker version may not be compatible with this script. Do you want to proceed? (yes/no): " proceed
-    if [ "$proceed" != "yes" ]; then
-        echo "Exiting script."
-        exit 1
+    docker_version=$(docker --version | awk '{print $3}' | cut -d ',' -f1)
+    required_version="$DOCKER_REQ_VERSION"  # Define the required major version as a string
+
+    # Extract the major version from the Docker version string
+    installed_major_version=$(echo "$docker_version" | cut -d '.' -f1)
+
+    if [ "$installed_major_version" -lt "$required_version" ]; then
+        read -p "The installed Docker version may not be compatible with this script. Do you want to proceed? (yes/no): " proceed
+        if [ "$proceed" != "yes" ]; then
+            echo "Exiting script."
+            exit 1
+        fi
     fi
-fi
 fi
 
 
