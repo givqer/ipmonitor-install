@@ -88,7 +88,7 @@ if ! command -v docker &> /dev/null; then
 
     echo ""
     echo "Add user to docker group:"
-
+    sudo -E usermod -aG docker "$USER"
     echo "Done"
     # Check Docker version
     docker_version=$(docker version --format '{{.Server.Version}}' 2>&1)
