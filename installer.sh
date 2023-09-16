@@ -111,9 +111,10 @@ if command -v docker &> /dev/null; then
             echo "Exiting script."
             exit 1
         fi
+        cd ${APP_PATH} || exit
+        make dc-first-install-app
     fi
-cd ${APP_PATH} || exit
-make dc-first-install-app
+
 fi
 
 
