@@ -88,12 +88,17 @@ if ! command -v docker &> /dev/null; then
     # Check Docker version
 docker_version=$(docker version --format '{{.Server.Version}}' 2>&1)
 echo "Docker version: $docker_version"
+echo ""
+echo "Add user to docker group:"
+sudo usermod -aG docker "$USER"
+echo "Done"
+
 fi
 
 
 
 if command -v docker &> /dev/null; then
-    docker_version=$(docker version --format '{{.Server.Version}}')
+    docker_version=$(docker --version)
   if [ "$(echo "$docker_version < 24" | bc)" -eq 1 ]; then
     read -p "The installed Docker version may not be compatible with this script. Do you want to proceed? (yes/no): " proceed
     if [ "$proceed" != "yes" ]; then
