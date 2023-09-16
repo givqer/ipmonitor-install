@@ -2,7 +2,7 @@
 export DEBIAN_FRONTEND=noninteractive
 
 APP_PATH="/opt/ipmonitor"
-DOCKER_REQ_VERSION="25"
+DOCKER_REQ_VERSION="24"
 	check_folder() {
     if [[ -z $1 ]]; then
         echo "Error: Folder path not provided."
@@ -79,7 +79,7 @@ if ! command -v docker &> /dev/null; then
     echo "Docker is not installed. Installing Docker..."
     # Install Docker using the official script (for Linux)
     curl -fsSL https://get.docker.com -o get-docker.sh
-    sudo sh get-docker.sh --version 24.0 --channel stable
+    sudo sh get-docker.sh --version 23.0 --channel stable
     # Start and enable the Docker service (for Linux)
     sudo systemctl start docker
     sudo systemctl enable docker
