@@ -81,12 +81,14 @@ if ! command -v docker &> /dev/null; then
     curl -fsSL https://get.docker.com -o get-docker.sh
     sudo sh get-docker.sh --version 23.0 --channel stable
     # Start and enable the Docker service (for Linux)
-    sudo systemctl start docker
+
     sudo systemctl enable docker
+    sleep 10
+    sudo systemctl start docker
+    sleep 20
     # Clean up the installation script
     rm get-docker.sh
     echo "Docker has been installed."
-
     echo ""
     echo "Add user to docker group:"
     sudo -E usermod -aG docker "$USER"
@@ -95,6 +97,7 @@ if ! command -v docker &> /dev/null; then
     docker_version=$(docker --version  2>&1)
     echo "Docker version: $docker_version"
 fi
+
 
 
 
