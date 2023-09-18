@@ -128,7 +128,6 @@ if command -v docker &> /dev/null; then
         sudo -E make dc-create-first-user
 
         echo "Setting up crontab:"
-
         crontab -l 2>/dev/null; crontab ./.etc/crontab/ipmonitor
 
 fi

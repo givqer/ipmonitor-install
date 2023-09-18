@@ -24,7 +24,7 @@ dc-up:
 	docker compose up --scale dns-consumer=3 -d
 
 dc-create-first-user:
-	docker compose docker compose exec workspace php artisan ipm:create-user
+	docker compose exec workspace php artisan ipm:create-user
 
 dc-shell:
 	docker compose up workspace -d
