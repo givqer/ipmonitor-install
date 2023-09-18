@@ -14,7 +14,11 @@ export ARCH
 
 
 dc-first-install-app: dc-pull dc-add-host dc-up dc-init
-dc-exists-folder-run:
+
+dc-certbot-install:
+	docker compose -f docker-compose.certbot.yml up nginx -d
+	docker compose -f docker-compose.certbot.yml up certbot
+	docker compose -f docker-compose.certbot.yml down
 
 dc-up:
 	docker compose up --scale dns-consumer=3 -d
@@ -48,6 +52,7 @@ dc-add-host:
 	echo "127.0.0.1    $(APP_DOMAIN)" | sudo tee -a /etc/hosts
 
 dc-down:
+	docker compose down
 dc-kill:
 	docker compose --profile=testing down
 
@@ -56,4 +61,6 @@ dc-pull:
 
 dc-bash:
 	docker compose exec workspace bash
+dc-ps:
+	docker compose ps
 

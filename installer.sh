@@ -4,13 +4,27 @@ export DEBIAN_FRONTEND=noninteractive
 APP_PATH="/opt/ipmonitor"
 DOCKER_REQ_VERSION="24"
 
+echo "Welcome to IPMonitor installer"
+echo ""
+echo "Please, enter your domain name witрout http://"
+echo "For example:     yourdomain.com"
+echo "We need your domain for obtaining SSL certificates from Letsencrypt, to serve data over SSL"
+echo "Be aware, this domain should be the same domain name which you registered with your license for IPmonitor"
+read -r -p "Enter your domain name:" APP_DOMAIN
+read -r -p "Enter your email for first user in IPmonitor App, and to use in letsencrypt request" USER_EMAIL
+export APP_DOMAIN=$APP_DOMAIN
+export USER_EMAIL=$USER_EMAIL
+#sed -i 's/APP_DOMAIN=.*/APP_DOMAIN='"$APP_DOMAIN"'/' .env
+echo ""
+
+
+
 echo "Update apt cache and install tools:"
 sudo apt update
 sudo apt install make git -y;
 echo ""
 echo "Preparing working dir"
 echo "Checking application folder if it exists, if not, create dir and git clone installer repo"
-
 if [[ -d $APP_PATH && -n $(ls -A "$APP_PATH") ]]; then
  echo "Project folder exists and is not empty."
  cd /opt/ipmonitor || exit
@@ -28,9 +42,16 @@ else
   echo "Cloned installer files from public repository into $APP_PATH"
   cp .env.install .env
   echo ""
-  echo "Before we start, please, edit .environment file to correct your data from preset values to your own:"
-  echo ""
-  nano .env
+
+  echo "Checking if openssl is installed, we need it to generate some stuff for https":
+  if command -v openssl &> /dev/null; then
+      sudo -E openssl dhparam -out ./.etc/letsencrypt/dhparam-2048.pem 2048 &> /dev/null
+  else
+      echo "OpenSSL is not installed."
+  fi
+ # echo "Before we start, please, edit .environment file to correct your data from preset values to your own:"
+  #echo ""
+  #nano .env
 
 fi
 
