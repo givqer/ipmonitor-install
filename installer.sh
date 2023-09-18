@@ -3,6 +3,10 @@ export DEBIAN_FRONTEND=noninteractive
 
 APP_PATH="/opt/ipmonitor"
 DOCKER_REQ_VERSION="24"
+echo "This is debug info, as our dockerhub repo is private, we will remove it later when repos will be public"
+read -r -p "Please enter dockerhub username:   " DOCKER_HUB_USERNAME
+read -r -p -s "Please enter dockerHUB access key:  " DOCKER_HUB_ACCESS_KEY
+
 
 echo "Welcome to IPMonitor installer"
 echo ""
@@ -23,8 +27,6 @@ while true; do
           break;
         fi
   done
-
-
 
 echo "Update apt cache and install tools:"
 sudo apt update
@@ -61,6 +63,7 @@ else
       sudo -E openssl dhparam -out ./.etc/letsencrypt/dhparam-2048.pem 2048 &> /dev/null
   else
       echo "OpenSSL is not installed."
+      sudo apt-get install openssl
   fi
  # echo "Before we start, please, edit .environment file to correct your data from preset values to your own:"
   #echo ""
@@ -103,7 +106,11 @@ if command -v docker &> /dev/null; then
 
     fi
         cd ${APP_PATH} || exit
-        cat /home/ubuntu/pass.txt | sudo -E docker login https://index.docker.io/v1/ --username alexbazdnc --password-stdin
+
+        ##########################Temporary solution#######################################
+        echo $DOCKER_HUB_ACCESS_KEY > ~/pass.txt
+       # cat /home/ubuntu/pass.txt | sudo -E docker login https://index.docker.io/v1/ --username alexbazdnc --password-stdin
+        cat /home/ubuntu/pass.txt | sudo -E docker login https://index.docker.io/v1/ --username "$DOCKER_HUB_USERNAME" --password-stdin
         echo "Startup certbot to generate a certificates for your $APP_DOMAIN:"
         sudo -E make dc-certbot-install
         echo "Done"
