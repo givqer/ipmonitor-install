@@ -41,7 +41,7 @@ else
   echo "Cloned installer files from public repository into $APP_PATH"
   cp .env.install .env
   echo ""
-  echo "USER_EMAIL:$(USER_EMAIL)" | sudo tee -a ${APP_PATH}/.env
+  echo "USER_EMAIL:${USER_EMAIL}" | sudo tee -a ${APP_PATH}/.env
   sed -i 's/APP_DOMAIN=.*/APP_DOMAIN='"$APP_DOMAIN"'/' .env
   echo ""
   echo "Checking if openssl is installed, we need it to generate some stuff for https":
