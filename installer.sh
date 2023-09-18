@@ -4,9 +4,12 @@ export DEBIAN_FRONTEND=noninteractive
 APP_PATH="/opt/ipmonitor"
 DOCKER_REQ_VERSION="24"
 echo "This is debug info, as our dockerhub repo is private, we will remove it later when repos will be public"
-read -r -p "Please enter dockerhub username:   " DOCKER_HUB_USERNAME
-read -r -p -s "Please enter dockerHUB access key:  " DOCKER_HUB_ACCESS_KEY
+read -r -p "Please enter dockerhub username: " DOCKER_HUB_USERNAME
+echo "Please enter dockerhub access key: "
+read -rs  DOCKER_HUB_ACCESS_KEY
 
+echo ""
+echo ""
 
 echo "Welcome to IPMonitor installer"
 echo ""
