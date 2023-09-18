@@ -10,7 +10,7 @@ services:
     volumes:
       - ./.docker/nginx/templates-certbot/certbot.conf.template:/etc/nginx/templates/default.conf.temlate
       - ./etc/letsencrypt:/etc/letsencrypt
-      - ./certbot/data:/var/www/certbot
+      - ./.docker/certbot/data:/var/www/certbot
 
   certbot:
     container_name: certbot
@@ -23,4 +23,4 @@ services:
       -d ${APP_DOMAIN}
     volumes:
       - ./etc/letsencrypt:/etc/letsencrypt
-      - ./certbot/data:/var/www/certbot
+      - ./.docker/certbot/data:/var/www/certbot
