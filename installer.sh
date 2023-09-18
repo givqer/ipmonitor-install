@@ -65,9 +65,11 @@ else
       echo "OpenSSL is not installed."
       sudo apt-get install openssl
   fi
- # echo "Before we start, please, edit .environment file to correct your data from preset values to your own:"
-  #echo ""
-  #nano .env
+
+  echo "Generating mysql password:"
+  MYSQL_PASSWORD=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 24)
+   sed -i 's/DB_PASSWORD=.*/APP_DOMAIN='"$MYSQL_PASSWORD"'/' .env
+   echo "Done"
 
 fi
 
@@ -108,7 +110,7 @@ if command -v docker &> /dev/null; then
         cd ${APP_PATH} || exit
 
         ##########################Temporary solution#######################################
-        echo $DOCKER_HUB_ACCESS_KEY > ~/pass.txt
+        echo "$DOCKER_HUB_ACCESS_KEY" > ~/pass.txt
        # cat /home/ubuntu/pass.txt | sudo -E docker login https://index.docker.io/v1/ --username alexbazdnc --password-stdin
         cat /home/ubuntu/pass.txt | sudo -E docker login https://index.docker.io/v1/ --username "$DOCKER_HUB_USERNAME" --password-stdin
         echo "Startup certbot to generate a certificates for your $APP_DOMAIN:"
@@ -121,6 +123,11 @@ if command -v docker &> /dev/null; then
         echo "Done"
         echo "Please create firs user in the system:"
         sudo -E make dc-create-first-user
+
+        echo "Setting up crontab:"
+
+        crontab -l 2>/dev/null; crontab ./.etc/crontab/ipmonitor
+
 fi
 
 echo ""
