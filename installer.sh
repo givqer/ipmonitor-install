@@ -10,8 +10,8 @@ echo "Please, enter your domain name witрout http://"
 echo "For example:     yourdomain.com"
 echo "We need your domain for obtaining SSL certificates from Letsencrypt, to serve data over SSL"
 echo "Be aware, this domain should be the same domain name which you registered with your license for IPmonitor"
-read -r -p "Enter your domain name:" APP_DOMAIN
-read -r -p "Enter your email for first user in IPmonitor App, and to use in letsencrypt request" USER_EMAIL
+read -r -p "Enter your domain name:   " APP_DOMAIN
+read -r -p "Enter your email for first user in IPmonitor App, and to use in letsencrypt request:   " USER_EMAIL
 export APP_DOMAIN=$APP_DOMAIN
 export USER_EMAIL=$USER_EMAIL
 
