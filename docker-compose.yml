@@ -67,6 +67,7 @@ services:
     restart: on-failure
     volumes:
       - ./.env:/var/www/app/.env
+      - ./src/license.dat:/var/www/app/license.dat
     networks:
       - ipmonitor
 
