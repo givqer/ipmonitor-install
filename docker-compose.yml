@@ -11,6 +11,7 @@ services:
       - ${NGINX_HTTPS:-443}:443
     environment:
       FPM_HOST: php-fpm:9000
+      APP_DOMAIN: ${APP_DOMAIN}
     depends_on:
       - php-fpm
     volumes:

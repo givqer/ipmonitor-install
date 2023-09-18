@@ -52,6 +52,7 @@ dc-add-host:
 	echo "127.0.0.1    $(APP_DOMAIN)" | sudo tee -a /etc/hosts
 
 dc-down:
+	docker compose down
 dc-kill:
 	docker compose --profile=testing down
 
@@ -60,4 +61,6 @@ dc-pull:
 
 dc-bash:
 	docker compose exec workspace bash
+dc-ps:
+	docker compose ps
 
