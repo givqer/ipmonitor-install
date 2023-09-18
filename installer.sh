@@ -91,6 +91,9 @@ if command -v docker &> /dev/null; then
     fi
         cd ${APP_PATH} || exit
         cat /home/ubuntu/pass.txt | sudo -E docker login https://index.docker.io/v1/ --username alexbazdnc --password-stdin
+        echo "Startup certbot to generate a certificates for your $APP_DOMAIN:"
+        sudo -E make dc-certbot-install
+
         sudo -E make dc-first-install-app
 fi
 
