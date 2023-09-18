@@ -14,8 +14,7 @@ read -r -p "Enter your domain name:" APP_DOMAIN
 read -r -p "Enter your email for first user in IPmonitor App, and to use in letsencrypt request" USER_EMAIL
 export APP_DOMAIN=$APP_DOMAIN
 export USER_EMAIL=$USER_EMAIL
-#sed -i 's/APP_DOMAIN=.*/APP_DOMAIN='"$APP_DOMAIN"'/' .env
-echo ""
+
 
 
 
@@ -42,7 +41,9 @@ else
   echo "Cloned installer files from public repository into $APP_PATH"
   cp .env.install .env
   echo ""
-
+  echo "USER_EMAIL:$(USER_EMAIL)" | sudo tee -a ${APP_PATH}/.env
+  sed -i 's/APP_DOMAIN=.*/APP_DOMAIN='"$APP_DOMAIN"'/' .env
+  echo ""
   echo "Checking if openssl is installed, we need it to generate some stuff for https":
   if command -v openssl &> /dev/null; then
       sudo -E openssl dhparam -out ./.etc/letsencrypt/dhparam-2048.pem 2048 &> /dev/null
