@@ -106,7 +106,15 @@ if command -v docker &> /dev/null; then
         cat /home/ubuntu/pass.txt | sudo -E docker login https://index.docker.io/v1/ --username alexbazdnc --password-stdin
         echo "Startup certbot to generate a certificates for your $APP_DOMAIN:"
         sudo -E make dc-certbot-install
-
+        echo "Done"
+        echo ""
+        echo "Spinning up our application:"
         sudo -E make dc-first-install-app
+        echo ""
+        echo "Done"
+        echo "Please create firs user in the system:"
+        sudo -E make dc-create-first-user
 fi
 
+echo ""
+echo "Installation completed. You can visit webpage here https://$APP_DOMAIN"
