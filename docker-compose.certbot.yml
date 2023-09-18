@@ -8,8 +8,8 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./.docker/nginx/templates-certbot/certbot.conf.template:/etc/nginx/templates/default.conf.temlate
-      - ./etc/letsencrypt:/etc/letsencrypt
+      - ./.docker/nginx/templates-certbot/certbot.conf.template:/etc/nginx/templates/default.conf.template
+      - ./.etc/letsencrypt:/etc/letsencrypt
       - ./.docker/certbot/data:/var/www/certbot
 
   certbot:
@@ -22,5 +22,5 @@ services:
       --email ${EMAIL} --server https://acme-staging-v02.api.letsencrypt.org/directory --agree-tos --no-eff-email --test-cert
       -d ${APP_DOMAIN}
     volumes:
-      - ./etc/letsencrypt:/etc/letsencrypt
+      - ./.etc/letsencrypt:/etc/letsencrypt
       - ./.docker/certbot/data:/var/www/certbot
