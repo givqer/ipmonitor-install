@@ -71,7 +71,7 @@ else
 
   echo "Generating mysql password:"
   MYSQL_PASSWORD=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 24)
-   sed -i 's/DB_PASSWORD=.*/MYSQL_PASSWORD='"$MYSQL_PASSWORD"'/' .env
+   sed -i 's/DB_PASSWORD=.*/DB_PASSWORD='"$MYSQL_PASSWORD"'/' .env
    echo "Done"
 
 fi
