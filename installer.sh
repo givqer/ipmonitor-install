@@ -6,7 +6,7 @@ DOCKER_REQ_VERSION="24"
 
 echo "Welcome to IPMonitor installer"
 echo ""
-echo "Please, enter your domain name witрout http://"
+echo "Please, enter your domain name without http://"
 echo "For example:     yourdomain.com"
 echo "We need your domain for obtaining SSL certificates from Letsencrypt, to serve data over SSL"
 echo "Be aware, this domain should be the same domain name which you registered with your license for IPmonitor"
