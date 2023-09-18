@@ -4,6 +4,17 @@ export DEBIAN_FRONTEND=noninteractive
 APP_PATH="/opt/ipmonitor"
 DOCKER_REQ_VERSION="24"
 
+echo "Welcome to IPMonitor installer"
+echo ""
+echo "Please, enter your domain name witрout http://"
+echo "For example:     yourdomain.com"
+echo "We need your domain for obtaining SSL certificates from Letsencrypt, to serve data over SSL"
+echo "Be aware, this domain should be the same domain name which you registered with your license for IPmonitor"
+read -r -p "Enter your domain name:" APP_DOMAIN
+read -r -p "Enter your email for first user in IPmonitor App, and to use in letsencrypt request" USER_EMAIL
+
+#sed -i 's/APP_DOMAIN=.*/APP_DOMAIN='"$APP_DOMAIN"'/' .env
+
 echo "Update apt cache and install tools:"
 sudo apt update
 sudo apt install make git -y;
@@ -28,9 +39,9 @@ else
   echo "Cloned installer files from public repository into $APP_PATH"
   cp .env.install .env
   echo ""
-  echo "Before we start, please, edit .environment file to correct your data from preset values to your own:"
-  echo ""
-  nano .env
+ # echo "Before we start, please, edit .environment file to correct your data from preset values to your own:"
+  #echo ""
+  #nano .env
 
 fi
 

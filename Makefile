@@ -14,7 +14,11 @@ export ARCH
 
 
 dc-first-install-app: dc-pull dc-add-host dc-up dc-init
-dc-exists-folder-run:
+
+dc-certbot-install:
+	docker compose -f docker-compose.certbot.yml up nginx -d
+	docker compose -f docker-compose.certbot.yml up certbot
+	docker compose -f docker-compose.certbot.yml down
 
 dc-up:
 	docker compose up --scale dns-consumer=3 -d

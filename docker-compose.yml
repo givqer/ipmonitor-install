@@ -13,9 +13,24 @@ services:
       FPM_HOST: php-fpm:9000
     depends_on:
       - php-fpm
+    volumes:
+      - ./.etc/letsencrypt:/etc/letsencrypt:ro
+      - ./.docker/certbot/data:/var/www/certbot
     restart: on-failure
     networks:
       - ipmonitor
+
+  certbot:
+    container_name: certbot
+    image: certbot/certbot:latest
+#    depends_on:
+    command: >-
+      certonly --reinstall --webroot --webroot-path=/var/www/certbot
+      --email ${EMAIL} --agree-tos --no-eff-email
+      -d ${APP_DOMAIN}
+    volumes:
+      - ./.etc/letsencrypt:/etc/letsencrypt
+      - ./.docker/certbot/data:/var/www/certbot
 
   workspace:
     image: ipmonitor/workspace:${APP_VERSION:-latest}
