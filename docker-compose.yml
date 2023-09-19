@@ -61,7 +61,6 @@ services:
       target: php-fpm
     user: www-data:www-data
     depends_on:
-      - mailhog
       - mysql
       - redis
     restart: on-failure
@@ -124,6 +123,8 @@ services:
       - mysql
       - redis
     restart: unless-stopped
+    volumes:
+      - ./.env:/var/www/app/.env
     healthcheck:
       test: [ "CMD", "php", "artisan", "system-health:check" ]
     networks:
