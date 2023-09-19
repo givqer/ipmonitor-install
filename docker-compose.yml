@@ -101,27 +101,17 @@ services:
     networks:
       - ipmonitor
 
-  mailhog:
-    image: mailhog/mailhog:latest
-    ports:
-      - ${FORWARD_MAILHOG_PORT:-1025}:1025
-      - ${FORWARD_MAILHOG_DASHBOARD_PORT:-8025}:8025
-    restart: on-failure
-    networks:
-      - ipmonitor
-    logging:
-      driver: none
-
   dns-consumer:
     image: ipmonitor/workspace:${APP_VERSION:-latest}
     user: ${CURRENT_UID}:${CURRENT_GID}
     command: php artisan dns:consume
     depends_on:
-      - mailhog
       - mysql
       - redis
     healthcheck:
       test: [ "CMD", "php", "artisan", "system-health:check" ]
+    volumes:
+      - ./.env:/var/www/app/.env
     restart: unless-stopped
     networks:
       - ipmonitor
@@ -131,7 +121,6 @@ services:
     user: ${CURRENT_UID}:${CURRENT_GID}
     command: php artisan rdns:consume
     depends_on:
-      - mailhog
       - mysql
       - redis
     restart: unless-stopped
@@ -145,10 +134,11 @@ services:
     user: ${CURRENT_UID}:${CURRENT_GID}
     command: php artisan senderscore:consume
     depends_on:
-      - mailhog
       - mysql
       - redis
     restart: unless-stopped
+    volumes:
+      - ./.env:/var/www/app/.env
     healthcheck:
       test: [ "CMD", "php", "artisan", "system-health:check" ]
     networks:
@@ -159,10 +149,11 @@ services:
     user: ${CURRENT_UID}:${CURRENT_GID}
     command: php artisan snds:consume
     depends_on:
-      - mailhog
       - mysql
       - redis
     restart: unless-stopped
+    volumes:
+      - ./.env:/var/www/app/.env
     healthcheck:
       test: [ "CMD", "php", "artisan", "system-health:check" ]
     networks:
@@ -173,9 +164,10 @@ services:
     user: ${CURRENT_UID}:${CURRENT_GID}
     command: php artisan db:consume
     depends_on:
-      - mailhog
       - mysql
       - redis
+    volumes:
+      - ./.env:/var/www/app/.env
     restart: unless-stopped
     healthcheck:
       test: [ "CMD", "php", "artisan", "system-health:check" ]
@@ -190,9 +182,10 @@ services:
     user: ${CURRENT_UID}:${CURRENT_GID}
     command: php artisan ipm-notifications:consume
     depends_on:
-      - mailhog
       - mysql
       - redis
+    volumes:
+      - ./.env:/var/www/app/.env
     restart: unless-stopped
     healthcheck:
       test: [ "CMD", "php", "artisan", "system-health:check" ]
