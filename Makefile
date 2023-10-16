@@ -44,11 +44,10 @@ dc-yarn-install:
 dc-init:
 	docker compose up workspace -d
 	docker compose exec workspace php artisan key:generate
-	docker compose exec workspace php artisan migrate
-	#docker compose exec workspace php artisan db:seed --class=Database\\Seeders\\Dev\\DevelopmentFixturesSeeder
+	docker compose exec workspace php artisan migrate --force
 
 dc-migrate:
-	docker compose exec workspace php artisan migrate
+	docker compose exec workspace php artisan migrate --force
 
 dc-add-host:
 	echo "127.0.0.1    $(APP_DOMAIN)" | sudo tee -a /etc/hosts
