@@ -19,8 +19,9 @@ services:
       - nginx
     command: >-
       certonly --webroot --webroot-path=/var/www/certbot
-      --email ${USER_EMAIL} --server https://acme-staging-v02.api.letsencrypt.org/directory --agree-tos --no-eff-email --test-cert
+      --email ${USER_EMAIL} --agree-tos --no-eff-email
       -d ${APP_DOMAIN}
+#      --server https://acme-staging-v02.api.letsencrypt.org/directory --test-cert
     volumes:
       - ./.etc/letsencrypt:/etc/letsencrypt
       - ./.docker/certbot/data:/var/www/certbot
